@@ -6,11 +6,11 @@ import com.interswitchng.sdk.payment.model.PurchaseResponse;
 import com.interswitchng.sdk.payment.IswCallback;
 import org.apache.cordova.CallbackContext;
 
-public class PaymentCallbacks extends IswCallback<PurchaseResponse> {
+public class PaymentCallback extends IswCallback<PurchaseResponse> {
     private transient CallbackContext callbackContext;
 
-    public PaymentCallbacks(CallbackContext callbackContext) {
-        this.callbackContext = context;
+    public PaymentCallback(CallbackContext callbackContext) {
+        this.callbackContext = callbackContext;
     }
 
     @Override

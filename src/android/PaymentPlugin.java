@@ -6,6 +6,7 @@ import com.interswitchng.sdk.auth.Passport;
 import com.interswitchng.sdk.model.RequestOptions;
 import com.interswitchng.sdk.model.User;
 import com.interswitchng.sdk.model.UserInfoRequest;
+import com.interswitchng.sdk.model.SplitSettlement;
 import com.interswitchng.sdk.payment.IswCallback;
 import com.interswitchng.sdk.payment.Payment;
 import com.interswitchng.sdk.payment.android.PassportSDK;
@@ -18,6 +19,10 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.os.Bundle;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 
 /**
  * @author Babajide.Apata
@@ -42,6 +47,14 @@ public class PaymentPlugin extends CordovaPlugin  {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 		super.initialize(cordova, webView);
         activity =  cordova.getActivity();
+        try{
+            ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
+            Bundle bundle = applicationInfo.metaData;
+            clientId = bundle.getString("clientId");
+            clientSecret = bundle.getString("clientSecret");
+        }catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 	}
 	public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         final PayWithOutUI payWithOutUI = new PayWithOutUI(activity,clientId,clientSecret);
@@ -289,20 +302,31 @@ public class PaymentPlugin extends CordovaPlugin  {
         try{
             if (args != null && args.length() > 0) {
                 JSONObject params = args.getJSONObject(0);
-                this.clientId=params.getString("clientId");
-                this.clientSecret=params.getString("clientSecret");
-                String paymentApi = params.getString("paymentApi");
-                String passportApi = params.getString("passportApi");
-                if( (paymentApi != null && paymentApi.length()>0) && (passportApi != null && passportApi.length()>0)){
-                    Payment.overrideApiBase(params.getString("paymentApi")); // used to override the payment api base url.
-                    Passport.overrideApiBase(params.getString("passportApi"));
+                String environment = params.getString("environment");
+                JSONArray settlementInfo = params.getJSONArray("settlement");
+                SplitSettlement[] splitSettlements = new SplitSettlement[settlementInfo.length()];
+                if (settlementInfo.length()>0 && settlementInfo != null){
+                    for (int i=0; i <settlementInfo.length(); i++){
+                        JSONObject splitSettlement = settlementInfo.getJSONObject(i);
+                        SplitSettlement mySplitSettlement = new SplitSettlement();
+                        mySplitSettlement.setAccountIdentifier(splitSettlement.getString("accountIdentifier"));
+                        mySplitSettlement.setAmount(splitSettlement.getString("amount"));
+                        splitSettlements[i] = mySplitSettlement;
+                    }
+                    System.out.println(settlementInfo);
+                }
+                if(environment.equals("test")){
+                    Payment.overrideApiBase(Payment.QA_API_BASE); // used to override the payment api base url.
+                    Passport.overrideApiBase(Passport.QA_API_BASE);
+                }else if (environment.equals("sandbox")){
+                    Payment.overrideApiBase(Payment.SANDBOX_API_BASE); // used to override the payment api base url.
+                    Passport.overrideApiBase(Passport.SANDBOX_API_BASE);
                 }
                 if((clientId !=null && clientSecret != null) && (clientId !="" && clientSecret !="")){
                     options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).build();
-                    //callbackContext.success("Initialization was successfull");
                 }
-                else{
-                    //callbackContext.error("Invalid ClientId or Client Secret : ");
+                if((settlementInfo !=null && settlementInfo.length()>0)){
+                    options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).setSplitSettlementInformation(splitSettlements).build();
                 }
             }
         }

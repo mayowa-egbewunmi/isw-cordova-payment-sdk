@@ -8,8 +8,7 @@ import com.interswitchng.sdk.payment.android.inapp.PayWithCard;
 import com.interswitchng.sdk.payment.android.inapp.PayWithToken;
 import com.interswitchng.sdk.payment.android.inapp.PayWithWallet;
 import com.interswitchng.sdk.payment.android.inapp.ValidateCard;
-import com.interswitchng.sdk.payment.model.PurchaseResponse;
-import com.interswitchng.sdk.payment.model.ValidateCardResponse;
+import com.interswitchng.sdk.payment.model.AuthorizeCardResponse;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -46,17 +45,9 @@ public class PayWithUI extends CordovaPlugin{
                     String currency = params.getString("currency");
                     String description = params.getString("description");
                     String amount = params.getString("amount");
-                    Pay pay = new Pay(activity, customerId, description, amount, currency, options, new IswCallback<PurchaseResponse>() {
-                        @Override
-                        public void onError(Exception error) {
-                            callbackContext.error(error.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(PurchaseResponse response) {
-                            PluginUtils.getPluginResult(callbackContext, response);
-                        }
-                    });
+                    String transactionRef = params.getString("transactionRef");
+                    final PaymentCallback paymentCallback = new PaymentCallback(callbackContext);
+                    Pay pay = new Pay(activity, customerId, description, amount, currency,transactionRef, options,paymentCallback);
                     pay.start();
                 } catch (Exception ex) {
                     callbackContext.error(ex.toString());
@@ -74,17 +65,15 @@ public class PayWithUI extends CordovaPlugin{
                     String currency = params.getString("currency");
                     String description = params.getString("description");
                     String amount = params.getString("amount");
-                    PayWithCard pay = new PayWithCard(activity, customerId, description, amount, currency, options, new IswCallback<PurchaseResponse>() {
-                        @Override
-                        public void onError(Exception error) {
-                            callbackContext.error(error.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(PurchaseResponse response) {
-                            PluginUtils.getPluginResult(callbackContext, response);
-                        }
-                    });
+                    boolean isRecurrent = params.getBoolean("isRecurrent");
+                    final PaymentCallback paymentCallback = new PaymentCallback(callbackContext);
+                    PayWithCard pay;
+                    if (isRecurrent){
+                        pay = new PayWithCard(activity, customerId, description, amount, currency, options, paymentCallback, isRecurrent);
+                    }
+                    else {
+                        pay = new PayWithCard(activity, customerId, description, amount, currency, options, paymentCallback);
+                    }
                     pay.start();
                 } catch (Exception ex) {
                     callbackContext.error(ex.toString());
@@ -102,17 +91,8 @@ public class PayWithUI extends CordovaPlugin{
                     String currency = params.getString("currency");
                     String description = params.getString("description");
                     String amount = params.getString("amount");
-                    PayWithWallet payWithWallet = new PayWithWallet(activity, customerId, description, amount, currency, options, new IswCallback<PurchaseResponse>() {
-                        @Override
-                        public void onError(Exception error) {
-                            callbackContext.error(error.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(PurchaseResponse response) {
-                            PluginUtils.getPluginResult(callbackContext, response);
-                        }
-                    });
+                    final PaymentCallback paymentCallback = new PaymentCallback(callbackContext);
+                    PayWithWallet payWithWallet = new PayWithWallet(activity, customerId, description, amount, currency, options,paymentCallback);
                     payWithWallet.start();
                 } catch (Exception ex) {
                     callbackContext.error(ex.toString());
@@ -134,17 +114,8 @@ public class PayWithUI extends CordovaPlugin{
                     String expiryDate = params.getString("expiryDate");
                     String customerId = params.getString("customerId");
                     String description = params.getString("description");
-                    PayWithToken payWithToken = new PayWithToken(activity, customerId, amount, token, expiryDate, currency, cardType, panLast4Digits, description, options, new IswCallback<PurchaseResponse>() {
-                        @Override
-                        public void onError(Exception error) {
-                            callbackContext.error(error.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(PurchaseResponse response) {
-                            PluginUtils.getPluginResult(callbackContext, response);
-                        }
-                    });
+                    final PaymentCallback paymentCallback = new PaymentCallback(callbackContext);
+                    PayWithToken payWithToken = new PayWithToken(activity, customerId, amount, token, expiryDate, currency, cardType, panLast4Digits, description, options,paymentCallback);
                     payWithToken.start();
                 } catch (Exception ex) {
                     callbackContext.error(ex.toString());
@@ -159,14 +130,14 @@ public class PayWithUI extends CordovaPlugin{
                     JSONObject params = args.getJSONObject(0);
                     String customerId = params.getString("customerId");
                     options = RequestOptions.builder().setClientId(clientId).setClientSecret(clientSecret).build();
-                    ValidateCard validateCard = new ValidateCard(activity, customerId, options, new IswCallback<ValidateCardResponse>() {
+                    ValidateCard validateCard = new ValidateCard(activity, customerId, options, new IswCallback<AuthorizeCardResponse>() {
                         @Override
                         public void onError(Exception error) {
                             callbackContext.error(error.getMessage());
                         }
 
                         @Override
-                        public void onSuccess(ValidateCardResponse response) {
+                        public void onSuccess(AuthorizeCardResponse response) {
                             PluginUtils.getPluginResult(callbackContext, response);
                         }
                     });

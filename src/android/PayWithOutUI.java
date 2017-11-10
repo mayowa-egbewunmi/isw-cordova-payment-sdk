@@ -6,8 +6,8 @@ import com.interswitchng.sdk.payment.IswCallback;
 import com.interswitchng.sdk.payment.android.PaymentSDK;
 import com.interswitchng.sdk.payment.android.WalletSDK;
 import com.interswitchng.sdk.payment.android.util.Util;
-import com.interswitchng.sdk.payment.model.AuthorizeOtpRequest;
-import com.interswitchng.sdk.payment.model.AuthorizeOtpResponse;
+import com.interswitchng.sdk.payment.model.AuthorizePurchaseRequest;
+import com.interswitchng.sdk.payment.model.AuthorizePurchaseResponse;
 import com.interswitchng.sdk.payment.model.Card;
 import com.interswitchng.sdk.payment.model.PaymentStatusRequest;
 import com.interswitchng.sdk.payment.model.PaymentStatusResponse;
@@ -61,6 +61,9 @@ public class PayWithOutUI extends CordovaPlugin{
                     request.setExpiryDate(params.getString("expiryDate"));
                     request.setCustomerId(params.getString("customerId"));
                     request.setCurrency(params.getString("currency"));
+                    if (params.getBoolean("isRecurrent")){
+                        request.setRecurrent(params.getBoolean("isRecurrent"));
+                    }
                     final Card card = new Card(request.getPan(), null, null, null);
                     final String type = card.getType();
                     new PaymentSDK(context, options).purchase(request, new IswCallback<PurchaseResponse>() {
@@ -177,6 +180,7 @@ public class PayWithOutUI extends CordovaPlugin{
                     request.setTransactionRef(RandomString.numeric(12));
                     request.setExpiryDate(params.getString("expiryDate"));
                     request.setCustomerId(params.getString("customerId"));
+                    request.setRecurrent(params.getBoolean("isRecurrent"));
                     final Card card = new Card(request.getPan(), null, null, null);
                     final String type = card.getType();
                     new PaymentSDK(context, options).validateCard(request, new IswCallback<ValidateCardResponse>() {
@@ -214,18 +218,19 @@ public class PayWithOutUI extends CordovaPlugin{
                 try {
                     options = RequestOptions.builder().setClientId(clientId).setClientSecret(clientSecret).build();
                     JSONObject params = args.getJSONObject(0);
-                    AuthorizeOtpRequest otpRequest = new AuthorizeOtpRequest();
+                    AuthorizePurchaseRequest otpRequest = new AuthorizePurchaseRequest();
                     otpRequest.setOtp(params.getString("otp")); // Accept OTP from user
-                    otpRequest.setOtpTransactionIdentifier(params.getString("otpTransactionIdentifier")); // Set the OTP identifier for the request
+                    otpRequest.setPaymentId(params.getString("paymentId"));
+                    otpRequest.setAuthData(params.getString("authData"));
                     otpRequest.setTransactionRef(params.getString("transactionRef")); // Set the unique transaction reference.
-                    new PaymentSDK(context, options).authorizeOtp(otpRequest, new IswCallback<AuthorizeOtpResponse>() {
+                    new PaymentSDK(context, options).authorizePurchase(otpRequest, new IswCallback<AuthorizePurchaseResponse>() {
                         @Override
                         public void onError(Exception error) {
                             callbackContext.error(error.getMessage());
                         }
 
                         @Override
-                        public void onSuccess(AuthorizeOtpResponse otpResponse) {
+                        public void onSuccess(AuthorizePurchaseResponse otpResponse) {
                             PluginUtils.getPluginResult(callbackContext, otpResponse);
                         }
                     });
