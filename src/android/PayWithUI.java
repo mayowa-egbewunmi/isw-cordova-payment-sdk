@@ -65,11 +65,14 @@ public class PayWithUI extends CordovaPlugin{
                     String currency = params.getString("currency");
                     String description = params.getString("description");
                     String amount = params.getString("amount");
-                    boolean isRecurrent = params.getBoolean("isRecurrent");
+                    boolean isRecurrent = false;
+                    if (params.has("isRecurrent")){
+                        isRecurrent = params.getBoolean("isRecurrent");
+                    }
                     final PaymentCallback paymentCallback = new PaymentCallback(callbackContext);
                     PayWithCard pay;
                     if (isRecurrent){
-                        pay = new PayWithCard(activity, customerId, description, amount, currency, options, paymentCallback, isRecurrent);
+                        pay = new PayWithCard(activity, customerId, description, amount, currency, options, paymentCallback, true);
                     }
                     else {
                         pay = new PayWithCard(activity, customerId, description, amount, currency, options, paymentCallback);
@@ -130,17 +133,17 @@ public class PayWithUI extends CordovaPlugin{
                     JSONObject params = args.getJSONObject(0);
                     String customerId = params.getString("customerId");
                     options = RequestOptions.builder().setClientId(clientId).setClientSecret(clientSecret).build();
-                    ValidateCard validateCard = new ValidateCard(activity, customerId, options, new IswCallback<AuthorizeCardResponse>() {
-                        @Override
-                        public void onError(Exception error) {
-                            callbackContext.error(error.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(AuthorizeCardResponse response) {
-                            PluginUtils.getPluginResult(callbackContext, response);
-                        }
-                    });
+                    boolean isRecurrent = false;
+                    if (params.has("isRecurrent")){
+                        isRecurrent = params.getBoolean("isRecurrent");
+                    }
+                    ValidateCard validateCard;
+                    final ValidateCardCallback validateCardCallback = new ValidateCardCallback(callbackContext);
+                    if (isRecurrent){
+                        validateCard = new ValidateCard(activity, customerId, options, validateCardCallback,true);
+                    }else {
+                        validateCard = new ValidateCard(activity, customerId, options, validateCardCallback);
+                    }
                     validateCard.start();
                 } catch (Exception error) {
                     callbackContext.error(error.toString());

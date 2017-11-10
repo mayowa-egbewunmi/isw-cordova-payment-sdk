@@ -1,7 +1,3 @@
-
-import com.interswitchng.sdk.util.RandomString;
-import com.interswitchng.sdk.util.StringUtils;
-import com.interswitchng.sdk.payment.android.util.Util;
 import com.interswitchng.sdk.payment.model.PurchaseResponse;
 import com.interswitchng.sdk.payment.IswCallback;
 import org.apache.cordova.CallbackContext;

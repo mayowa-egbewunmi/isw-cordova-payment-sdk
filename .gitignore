@@ -28,3 +28,12 @@ hs_err_pid*
 
 # Created by .ignore support plugin (hsz.mobi)
 /.idea/
+/.idea/copyright/
+/.idea/.name
+/.idea/compiler.xml
+/.idea/cordova-payment-plugin.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
+/.idea/encodings.xml

@@ -1,12 +1,15 @@
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.widget.Button;
 
 import com.interswitchng.sdk.auth.Passport;
 import com.interswitchng.sdk.model.RequestOptions;
+import com.interswitchng.sdk.model.SplitSettlement;
 import com.interswitchng.sdk.model.User;
 import com.interswitchng.sdk.model.UserInfoRequest;
-import com.interswitchng.sdk.model.SplitSettlement;
 import com.interswitchng.sdk.payment.IswCallback;
 import com.interswitchng.sdk.payment.Payment;
 import com.interswitchng.sdk.payment.android.PassportSDK;
@@ -20,17 +23,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Bundle;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-
 /**
  * @author Babajide.Apata
  * @description Expose the Payment to Cordova JavaScript Applications
  */
 
 public class PaymentPlugin extends CordovaPlugin  {
-	public PaymentPlugin() {
+    public PaymentPlugin() {
     }
     private String clientId;
     private String clientSecret;
@@ -45,7 +44,7 @@ public class PaymentPlugin extends CordovaPlugin  {
     //final RequestOptions options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).build();
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-		super.initialize(cordova, webView);
+        super.initialize(cordova, webView);
         activity =  cordova.getActivity();
         try{
             ApplicationInfo applicationInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
@@ -55,8 +54,8 @@ public class PaymentPlugin extends CordovaPlugin  {
         }catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-	}
-	public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    }
+    public boolean execute(final String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         final PayWithOutUI payWithOutUI = new PayWithOutUI(activity,clientId,clientSecret);
         final PayWithUI payWithUI = new PayWithUI(activity,clientId,clientSecret);
         if (action.equals("Init")) {
@@ -301,32 +300,36 @@ public class PaymentPlugin extends CordovaPlugin  {
     private void init(JSONArray args, CallbackContext callbackContext) {
         try{
             if (args != null && args.length() > 0) {
+                String environment;
                 JSONObject params = args.getJSONObject(0);
-                String environment = params.getString("environment");
-                JSONArray settlementInfo = params.getJSONArray("settlement");
-                SplitSettlement[] splitSettlements = new SplitSettlement[settlementInfo.length()];
-                if (settlementInfo.length()>0 && settlementInfo != null){
-                    for (int i=0; i <settlementInfo.length(); i++){
-                        JSONObject splitSettlement = settlementInfo.getJSONObject(i);
-                        SplitSettlement mySplitSettlement = new SplitSettlement();
-                        mySplitSettlement.setAccountIdentifier(splitSettlement.getString("accountIdentifier"));
-                        mySplitSettlement.setAmount(splitSettlement.getString("amount"));
-                        splitSettlements[i] = mySplitSettlement;
+                JSONArray settlementInfo;
+                if (params.has("environment")){
+                    environment = params.getString("environment");
+                    if(environment.equals("test")){
+                        Payment.overrideApiBase(Payment.QA_API_BASE); // used to override the payment api base url.
+                        Passport.overrideApiBase(Passport.QA_API_BASE);
+                    }else if (environment.equals("sandbox")){
+                        Payment.overrideApiBase(Payment.SANDBOX_API_BASE); // used to override the payment api base url.
+                        Passport.overrideApiBase(Passport.SANDBOX_API_BASE);
                     }
-                    System.out.println(settlementInfo);
                 }
-                if(environment.equals("test")){
-                    Payment.overrideApiBase(Payment.QA_API_BASE); // used to override the payment api base url.
-                    Passport.overrideApiBase(Passport.QA_API_BASE);
-                }else if (environment.equals("sandbox")){
-                    Payment.overrideApiBase(Payment.SANDBOX_API_BASE); // used to override the payment api base url.
-                    Passport.overrideApiBase(Passport.SANDBOX_API_BASE);
+                if (params.has("settlement")){
+                    settlementInfo = params.getJSONArray("settlement");
+                    SplitSettlement[] splitSettlements = new SplitSettlement[settlementInfo.length()];
+                    if (settlementInfo.length()>0){
+                        for (int i=0; i <settlementInfo.length(); i++){
+                            JSONObject splitSettlement = settlementInfo.getJSONObject(i);
+                            SplitSettlement mySplitSettlement = new SplitSettlement();
+                            mySplitSettlement.setAccountIdentifier(splitSettlement.getString("accountIdentifier"));
+                            mySplitSettlement.setAmount(splitSettlement.getString("amount"));
+                            splitSettlements[i] = mySplitSettlement;
+                        }
+                        System.out.println(settlementInfo);
+                        options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).setSplitSettlementInformation(splitSettlements).build();
+                    }
                 }
-                if((clientId !=null && clientSecret != null) && (clientId !="" && clientSecret !="")){
+                else if(!params.has("settlement") && (clientId !=null && clientSecret != null) && (!clientId.equals("") && !clientSecret.equals(""))){
                     options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).build();
-                }
-                if((settlementInfo !=null && settlementInfo.length()>0)){
-                    options = RequestOptions.builder().setClientId(this.clientId).setClientSecret(this.clientSecret).setSplitSettlementInformation(splitSettlements).build();
                 }
             }
         }

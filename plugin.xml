@@ -31,6 +31,7 @@
         <source-file src="src/android/PayWithOutUI.java" target-dir="src/" />
         <source-file src="src/android/PayWithUI.java" target-dir="src/" />
         <source-file src="src/android/PaymentCallback.java" target-dir="src/" />
+        <source-file src="src/android/ValidateCardCallback.java" target-dir="src/" />
         <framework src="com.android.support:appcompat-v7:23.1.1" />
         <framework src="com.android.support:design:23.1.1" />
         <framework custom="true" src="src/android/build.gradle" type="gradleReference" />
