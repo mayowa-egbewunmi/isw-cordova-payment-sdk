@@ -126,8 +126,22 @@ During development of your app, you should use the Plugin in sandbox mode to ena
 ```javascript
     function init(){
         var userDetails = {
-            paymentApi : "https://sandbox.interswitchng.com",
-            passportApi : "https://sandbox.interswitchng.com/passport"
+            environment:"test", // or sandbox
+            settlement : [
+                    {
+                        accountIdentifier:"Babajide Apata",
+                        amount:"500"
+                    },
+                    {
+                        accountIdentifier:"Ayodeji Agboola",
+                        amount:"300"
+                    },
+                    {
+                        accountIdentifier:"Akinyem Akindele",
+                        amount:"200"
+                    }
+            ]
+            // Settlement information is only applicable to split transactions
         };
         var initial = PaymentPlugin.init(userDetails);
     }
@@ -178,7 +192,8 @@ During development of your app, you should use the Plugin in sandbox mode to ena
         amount : 100, // Amount in Naira
         customerId : 1234567890, // Optional email, mobile no, BVN etc to uniquely identify the customer.
         currency : "NGN", // ISO Currency code
-        description : "Purchase Phone" // Description of product to purchase
+        description : "Purchase Phone", // Description of product to purchase
+        isRecurrent: true // If transaction is recurrent
     }
 ```
 
@@ -230,6 +245,7 @@ During development of your app, you should use the Plugin in sandbox mode to ena
 ```javascript
     var validateCardRequest = {
         customerId : 1234567890 // Optional email, mobile no, BVN etc to uniquely identify the customer
+        isRecurrent: true // If transaction is recurrent.
     }
 ```
 
