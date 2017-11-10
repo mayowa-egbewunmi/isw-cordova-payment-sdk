@@ -61,7 +61,7 @@ public class PayWithOutUI extends CordovaPlugin{
                     request.setExpiryDate(params.getString("expiryDate"));
                     request.setCustomerId(params.getString("customerId"));
                     request.setCurrency(params.getString("currency"));
-                    if (params.getBoolean("isRecurrent")){
+                    if (params.has("isRecurrent")){
                         request.setRecurrent(params.getBoolean("isRecurrent"));
                     }
                     final Card card = new Card(request.getPan(), null, null, null);
@@ -180,7 +180,8 @@ public class PayWithOutUI extends CordovaPlugin{
                     request.setTransactionRef(RandomString.numeric(12));
                     request.setExpiryDate(params.getString("expiryDate"));
                     request.setCustomerId(params.getString("customerId"));
-                    request.setRecurrent(params.getBoolean("isRecurrent"));
+                    if (params.has("isRecurrent"))
+                        request.setRecurrent(params.getBoolean("isRecurrent"));
                     final Card card = new Card(request.getPan(), null, null, null);
                     final String type = card.getType();
                     new PaymentSDK(context, options).validateCard(request, new IswCallback<ValidateCardResponse>() {
