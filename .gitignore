@@ -37,3 +37,6 @@ hs_err_pid*
 /.idea/vcs.xml
 /.idea/workspace.xml
 /.idea/encodings.xml
+
+.settings/
+.gradle/
