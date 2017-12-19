@@ -26,6 +26,9 @@
             <meta-data android:name="clientId" android:value="$CLIENT_ID" />
             <meta-data android:name="clientSecret" android:value="$CLIENT_SECRET" />
         </config-file>
+        <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="overwrite">
+            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="singleTop" android:name="MainActivity" android:theme="@style/Theme.AppCompat.Light" android:windowSoftInputMode="adjustResize" />
+        </edit-config>
         <source-file src="src/android/PaymentPlugin.java" target-dir="src/" />
         <source-file src="src/android/PluginUtils.java" target-dir="src/" />
         <source-file src="src/android/PayWithOutUI.java" target-dir="src/" />

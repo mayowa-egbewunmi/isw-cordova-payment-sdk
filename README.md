@@ -244,7 +244,7 @@ During development of your app, you should use the Plugin in sandbox mode to ena
 
 ```javascript
     var validateCardRequest = {
-        customerId : 1234567890 // Optional email, mobile no, BVN etc to uniquely identify the customer
+        customerId : 1234567890, // Optional email, mobile no, BVN etc to uniquely identify the customer
         isRecurrent: true // If transaction is recurrent.
     }
 ```
