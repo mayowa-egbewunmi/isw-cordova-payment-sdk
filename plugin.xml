@@ -8,15 +8,16 @@
     <repo></repo>
     <issue></issue>
 
-    <preference name="CLIENT_ID" default="" />
-    <preference name="CLIENT_SECRET" default="" />
-
     <js-module name="PaymentPlugin" src="www/PaymentPlugin.js">
         <clobbers target="PaymentPlugin" />
     </js-module>
     
     <!-- android -->
     <platform name="android">
+    
+    <preference name="CLIENT_ID" default="" />
+    <preference name="CLIENT_SECRET" default="" />
+    
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="PaymentPlugin" >
                 <param name="android-package" value="PaymentPlugin"/>
@@ -46,21 +47,21 @@
         <resource-file src="libs/gson-2.3.1.jar" target="libs/gson-2.3.1.jar" />
         <resource-file src="libs/payment-1.0.0.jar" target="libs/payment-1.0.0.jar" />
     </platform>
-
-
+    
     <platform name='ios'>
         <config-file target='config.xml' parent='/*'>
-          <feature name='PaymentPlugin'>
-            <param name='ios-package' value='PaymentPlugin'/>
-          </feature>
+            <feature name='PaymentPlugin'>
+                <param name='ios-package' value='PaymentPlugin'/>
+            </feature>
         </config-file>
         <source-file src='src/ios/PaymentPlugin.swift'/>
-        <source-file src='src/ios/PayWithoutUI.swift'/>
         <source-file src='src/ios/PayWithUI.swift'/>
         <source-file src='src/ios/Utils.swift'/>
 
         <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true"/>
+        <preference name="UseSwiftLanguageVersion" value="4"/>
         <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
     </platform>
+    
     
 </plugin>
