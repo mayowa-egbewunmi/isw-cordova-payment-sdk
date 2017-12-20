@@ -1,0 +1,32 @@
+{
+    "name": "PaymentPlugin",
+    "version": "1.0.0",
+    "description": "Cordova Payment Plugin Powered by Interswitch",
+    "cordova": {
+      "id": "cordova-isw-payment-plugin",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/AyoGitNg/cordova-payment-plugin.git"
+    },
+    "files": [
+      "plugin.xml",
+      "src",
+      "www",
+      "libs"
+    ],
+    "keywords": [
+      "cordova",
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios",
+      "interswitch",
+      "payment"
+    ],
+    "author": "Interswitch Limited",
+    "license": "MIT"
+  }
