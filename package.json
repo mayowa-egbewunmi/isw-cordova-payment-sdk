@@ -13,12 +13,6 @@
       "type": "git",
       "url": "https://github.com/AyoGitNg/cordova-payment-plugin.git"
     },
-    "files": [
-      "plugin.xml",
-      "src",
-      "www",
-      "libs"
-    ],
     "keywords": [
       "cordova",
       "ecosystem:cordova",

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin id="com.interswitchng.sdk.payment" version="0.0.1"
+<plugin id="cordova-isw-payment-plugin" version="1.0.0"
      xmlns:android="http://schemas.android.com/apk/res/android">
     <name>PaymentPlugin</name>
     <description>Cordova Payment Plugin on Interswitch Platform</description>
