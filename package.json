@@ -1,5 +1,5 @@
 {
-    "name": "PaymentPlugin",
+    "name": "cordova-isw-payment-plugin",
     "version": "1.0.0",
     "description": "Cordova Payment Plugin Powered by Interswitch",
     "cordova": {
