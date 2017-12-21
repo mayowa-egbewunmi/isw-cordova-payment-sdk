@@ -66,6 +66,7 @@
         <source-file src='src/ios/Utils.swift'/>
 
         <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true" embed="true"/>
+        <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true" />
         <framework src="CryptoSwift" type="podspec" spec="0.7.1" />
         <framework src="Alamofire" type="podspec" spec="4.4.0" />
         <framework src="SwiftyJSON" type="podspec" spec="3.1.4" />
