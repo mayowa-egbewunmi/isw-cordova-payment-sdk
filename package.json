@@ -27,6 +27,15 @@
       "interswitch",
       "payment"
     ],
+    "engines": {
+      "cordovaDependencies": {
+          "1.0.0": { 
+            "cordova-ios": ">=4.4.0",
+            "cordova-android": ">6.3.0",
+            "cordova": ">=7.0.0"
+          }
+      }
+    },
     "author": "Interswitch Limited",
     "license": "MIT"
   }

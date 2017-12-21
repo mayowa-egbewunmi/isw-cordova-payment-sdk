@@ -8,6 +8,12 @@
     <repo></repo>
     <issue></issue>
 
+    <engines>
+        <engine name="cordova" version=">=7.0.0" />
+        <engine name="cordova-android" version=">=6.3.0" />
+        <engine name="cordova-ios" version=">=4.4.0" />
+    </engines>
+
     <js-module name="PaymentPlugin" src="www/PaymentPlugin.js">
         <clobbers target="PaymentPlugin" />
     </js-module>
@@ -58,7 +64,13 @@
         <source-file src='src/ios/PayWithUI.swift'/>
         <source-file src='src/ios/Utils.swift'/>
 
-        <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true"/>
+        <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true" embed="true"/>
+        <framework src="CryptoSwift" type="podspec" spec="0.7.1" />
+        <framework src="Alamofire" type="podspec" spec="4.4.0" />
+        <framework src="SwiftyJSON" type="podspec" spec="3.1.4" />
+        <framework src="OpenSSL-Universal" type="podspec" spec="1.0.2.10" />
+
+
         <preference name="UseSwiftLanguageVersion" value="4"/>
         <preference name="USESWIFTLANGUAGEVERSION" value="4" default="4"/>
         <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
