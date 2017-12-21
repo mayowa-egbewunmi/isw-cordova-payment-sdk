@@ -60,6 +60,7 @@
 
         <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true"/>
         <preference name="UseSwiftLanguageVersion" value="4"/>
+        <preference name="USESWIFTLANGUAGEVERSION" value="4" default="4"/>
         <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
     </platform>
     
