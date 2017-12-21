@@ -55,6 +55,7 @@
     </platform>
     
     <platform name='ios'>
+        <hook type="before_plugin_install" src="scripts/prepareCocoaPods.js" />
         <config-file target='config.xml' parent='/*'>
             <feature name='PaymentPlugin'>
                 <param name='ios-package' value='PaymentPlugin'/>
