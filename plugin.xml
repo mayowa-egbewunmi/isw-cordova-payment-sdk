@@ -16,6 +16,7 @@
 
     <js-module name="PaymentPlugin" src="www/PaymentPlugin.js">
         <clobbers target="PaymentPlugin" />
+        <clobbers target="cordova.plugins.PaymentPlugin" />
     </js-module>
     
     <!-- android -->
@@ -67,15 +68,26 @@
 
         <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true" embed="true"/>
         <!-- <framework src="src/ios/Frameworks/PaymentSDK.framework" custom="true" /> -->
-        <framework src="CryptoSwift" type="podspec" spec="~> 0.7.0" />
+
+        <!-- use_frameworks! not yet supported ..https://issues.apache.org/jira/browse/CB-11893 -->
+        <!-- <framework src="CryptoSwift" type="podspec" spec="~> 0.7.0" />
         <framework src="Alamofire" type="podspec" spec="~> 4.4.0" />
         <framework src="SwiftyJSON" type="podspec" spec="~> 3.1.4" />
-        <framework src="OpenSSL-Universal" type="podspec" spec="~> 1.0.2.10" />
+        <framework src="OpenSSL-Universal" type="podspec" spec="~> 1.0.2.10" /> -->
 
+        <pods-config ios-min-version="8.0" use-frameworks="true">
+        </pods-config>
+
+        <pod name="Alamofire" version="4.4.0" />
+        <pod name="CryptoSwift" version="0.7.0" />
+        <pod name="SwiftyJSON" version="3.1.4" />
+        <pod name="OpenSSL-Universal" version="1.0.2.10" />
 
         <preference name="UseSwiftLanguageVersion" value="4" default="4"/>
         <preference name="USESWIFTLANGUAGEVERSION" value="4" default="4"/>
+
         <dependency id="cordova-plugin-add-swift-support" url="https://github.com/akofman/cordova-plugin-add-swift-support"/>
+        <dependency id="cordova-plugin-cocoapod-support"/>
     </platform>
     
     
