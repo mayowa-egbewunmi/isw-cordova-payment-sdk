@@ -40,7 +40,7 @@ The first step to ​using the plugin is to register as a merchant. This is desc
 * Add the cordova-payment-plugin from CLI, using this command
 
 ```terminal
-cordova plugin add https://github.com/AyoGitNg/cordova-payment-plugin.git --variable CLIENT_ID=clientId --variable CLIENT_SECRET=clientSecret
+cordova plugin add https://github.com/mayowa-egbewunmi/isw-cordova-payment-sdk.git --variable CLIENT_ID=clientId --variable CLIENT_SECRET=clientSecret
 ```
 
 * Add ```android``` platform. Make sure to add the platform **after** adding the plugin.
