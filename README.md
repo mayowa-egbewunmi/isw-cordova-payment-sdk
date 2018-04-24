@@ -70,48 +70,7 @@ cordova plugin add https://github.com/mayowa-egbewunmi/isw-cordova-payment-sdk.g
 cordova platform add ios
 ```
 
-* In ```Finder```, go to the **YourCordovaApp/platforms/ios** directory. Open the .xcodeproj file in XCode. A dialog may appear asking: Convert to latest Swift Syntax? Click the **Cancel** button.
 
-* In ```Finder```, go to the ```/platforms/ios/<NameOfApp>/Plugins/com.interswitchng.sdk.payment``` directory. You should see a **PaymentSDK.framework** file.
-
-* Drag the ​ **PaymentSDK.framework** file from ```Finder``` to XCode's **Embedded Binaries** section for your app's **TARGETS** settings.
-
-* In the dialog that appears, make sure ```Copy items if needed``` is unchecked.
-
-* **Important**: With ```XCode``` still open, click the project to view its settings. Under the **info** tab find the **Configurations** section and change all the values for ```Debug``` and ```Release``` to **None**. You can change it back once our setups are done.
-
-The **PaymentSDK.framework** needs some [Cocoapods](https://cocoapods.org/) dependencies so we'll need to install them.
-
-* Close Xcode. **cd** into ```platforms/ios``` directory
-
-* Run: 
-
-```terminal
-pod init
-```
-
-* Open the **Podfile** created and replace ```#``` commented parts with the following.
-
-```terminal
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, "8.0"
-use_frameworks!
-```
-
-* Add the following to the **Podfile**, inside the first ```target``` block.
-
-```
- pod 'CryptoSwift', :git => 'https://github.com/krzyzanowskim/CryptoSwift.git', :tag => '0.7.1'
- pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :tag => '4.4.0'
- pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git', :tag => '3.1.4'
- pod 'OpenSSL-Universal', '1.0.2.10'
-```
-
-* Now run:
-
-```terminal
-pod install
-```
 
 * After the pods are installed successfully you can go to the directory ```platforms/ios``` and open the ```<NameOfApp>.xcworkspace``` file in XCode. 
 
