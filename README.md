@@ -61,7 +61,7 @@ cordova platform add android
 * Add cordova payment plugin
 Replace clientId and clientSecret in the code below with your clientId and clientSecret
 ```
-cordova plugin add https://github.com/mayowa-egbewunmi/isw-cordova-payment-sdk.git
+cordova plugin add https://github.com/mayowa-egbewunmi/isw-cordova-payment-sdk.git --variable CLIENT_ID=clientId --variable CLIENT_SECRET=clientSecret
 ```
 
 * Add ```ios``` platform. Make sure to add the platform **after** adding the plugin.
